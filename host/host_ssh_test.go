@@ -1,22 +1,28 @@
 package host
 
 import (
+	"os"
 	"testing"
 )
 
 func TestHostSSHTrust(t *testing.T) {
-	hlb := HostLoginInfoBatch{
-		&HostLoginInfo{
-			Host:     "10.138.16.192",
-			UserName: "haieradmin",
-			Passwd:   "123,Haier",
-			Port:     22,
-		},
-	}
-	hlb.Init()
-	hlb.HostsSSHTrust()
+	host := os.Getenv("SSH_HOST")
+	username := os.Getenv("SSH_USERNAME")
+	pwd := os.Getenv("SSH_PASSWD")
+	if host != "" && username != "" && pwd != "" {
+		hlb := HostLoginInfoBatch{
+			&HostLoginInfo{
+				Host:     host,
+				UserName: username,
+				Passwd:   pwd,
+				Port:     22,
+			},
+		}
+		hlb.Init()
+		hlb.HostsSSHTrust()
 
-	if hlb[0].Result.Status != STATUS_OK {
-		t.Fatalf("%s:%s", hlb[0].Result.Message, hlb[0].Result.Reason)
+		if hlb[0].Result.Status != STATUS_OK {
+			t.Fatalf("%s:%s", hlb[0].Result.Message, hlb[0].Result.Reason)
+		}
 	}
 }
