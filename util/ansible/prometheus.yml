@@ -1,0 +1,140 @@
+global:
+  evaluation_interval: 30s
+  external_labels: {monitor: codelab-monitor}
+  scrape_interval: 30s
+rule_files: [/etc/prometheus/rules/*.rules]
+scrape_configs:
+- job_name: prometheus
+  relabel_configs:
+  - regex: (\d+\.\d+\.\d+\.\d+).*
+    source_labels: [__address__]
+    target_label: instance
+  static_configs:
+  - labels: {cluster: QD, project: MONITOR-PROD}
+    targets: ['10.138.16.192:9090']
+- job_name: linux
+  relabel_configs:
+  - regex: (\d+\.\d+\.\d+\.\d+).*
+    source_labels: [__address__]
+    target_label: instance
+  static_configs:
+  - labels: {cluster: QD, project: MONITOR-PROD}
+    targets: ['10.138.16.188:9100', '10.138.16.189:9100', '10.138.16.190:9100', '10.138.16.191:9100',
+      '10.138.16.192:9100', '10.135.16.162:9100', '10.135.16.164:9100', '10.138.40.219:9100',
+      '10.138.40.220:9100', '10.138.40.221:9100', '10.138.40.222:9100', '10.138.40.223:9100',
+      '10.138.40.224:9100', '10.138.40.225:9100']
+  - labels: {cluster: QD, project: PAAS-DEV}
+    targets: ['10.138.25.211:9100', '10.138.25.212:9100']
+  - labels: {cluster: QD, project: MONITOR-DEV}
+    targets: ['10.138.25.180:9100', '10.138.25.181:9100', '10.138.25.214:9100']
+  - labels: {cluster: QD, project: PAAS-PROD}
+    targets: ['10.138.8.215:9100', '10.138.8.216:9100']
+  - labels: {cluster: QD, project: HAIDAYUAN}
+    targets: ['10.138.26.140:9100', '10.138.26.142:9100']
+  - labels: {cluster: QD, project: CENTER}
+    targets: ['10.138.8.214:9100', '10.138.8.217:9100', '10.138.8.218:9100', '10.138.8.219:9100',
+      '10.138.8.223:9100', '10.138.8.224:9100', '10.138.8.225:9100', '10.138.8.226:9100',
+      '10.138.8.227:9100', '10.138.8.230:9100']
+  - labels: {cluster: QD, project: ADP}
+    targets: ['10.138.40.146:9100', '10.138.44.5:9100', '10.138.16.194:9100']
+  - labels: {cluster: QD, project: TDP}
+    targets: ['10.138.42.63:9100', '10.138.42.64:9100', '10.138.42.65:9100', '10.138.42.66:9100',
+      '10.138.42.67:9100', '10.138.42.68:9100', '10.138.42.69:9100', '10.138.42.60:9100',
+      '10.138.42.61:9100', '10.138.42.62:9100', '10.138.25.185:9100', '10.138.25.186:9100',
+      '10.138.25.182:9100', '10.138.25.183:9100', '10.138.25.184:9100']
+  - labels: {cluster: QD, project: COSMOIM}
+    targets: ['10.138.42.97:9100', '10.138.42.98:9100', '10.138.42.99:9100', '10.138.42.94:9100',
+      '10.138.42.95:9100', '10.138.42.96:9100', '10.138.42.100:9100', '10.138.42.101:9100',
+      '10.138.42.102:9100', '10.138.42.103:9100', '10.138.42.105:9100', '10.138.42.107:9100',
+      '10.138.42.108:9100', '10.138.111.82:9100', '10.138.111.83:9100', '10.138.111.96:9100',
+      '10.138.111.97:9100']
+  - labels: {cluster: QD, project: HDYBC}
+    targets: ['10.138.23.173:9100', '10.138.23.215:9100', '10.138.23.213:9100', '10.138.23.214:9100',
+      '10.138.23.212:9100', '10.138.23.169:9100']
+  - labels: {cluster: BJ, project: UOC}
+    targets: ['10.159.39.225-linux:10050', '10.159.39.226-linux:10050', '10.159.39.227-linux:10050',
+      '10.159.39.228-linux:10050', '10.159.39.229-linux:10050', '10.159.39.230-linux:10050',
+      '10.159.39.231-linux:10050', '10.159.39.232-linux:10050', '10.159.39.233-linux:10050',
+      '10.159.39.234-linux:10050', '10.159.39.235-linux:10050', '10.159.39.236-linux:10050',
+      '10.159.39.237-linux:10050', '10.159.39.238-linux:10050', '10.159.39.239-linux:10050',
+      '10.159.37.154-linux:10050', '10.159.37.155-linux:10050', '10.159.37.156-linux:10050',
+      '10.159.37.157-linux:10050']
+  - labels: {cluster: BJ, project: POINT}
+    targets: ['10.159.39.80-linux:10050', '10.159.39.66-linux:10050', '10.159.39.67-linux:10050',
+      '10.159.39.68-linux:10050', '10.159.39.69-linux:10050', '10.159.39.70-linux:10050',
+      '10.159.39.71-linux:10050', '10.159.39.72-linux:10050', '10.159.39.73-linux:10050',
+      '10.159.39.74-linux:10050', '10.159.39.75-linux:10050', '10.159.39.76-linux:10050',
+      '10.159.39.77-linux:10050', '10.159.39.78-linux:10050', '10.159.39.79-linux:10050']
+  - labels: {cluster: BJ, project: PORTAL}
+    targets: ['10.159.39.240-linux:10050', '10.159.39.241-linux:10050', '10.159.39.242-linux:10050',
+      '10.159.39.243-linux:10050', '10.159.39.244-linux:10050', '10.159.39.245-linux:10050']
+  - labels: {cluster: BJ, project: CSB}
+    targets: ['10.159.37.145-linux:10050', '10.159.37.146-linux:10050', '10.159.37.147-linux:10050',
+      '10.159.37.148-linux:10050', '10.159.37.149-linux:10050', '10.159.37.150-linux:10050']
+  - labels: {cluster: BJ, project: JHZX}
+    targets: ['10.159.37.166-linux:10050', '10.159.37.167-linux:10050', '10.159.37.168-linux:10050',
+      '10.159.37.169-linux:10050', '10.159.37.170-linux:10050', '10.159.37.171-linux:10050',
+      '10.159.37.172-linux:10050', '10.159.37.173-linux:10050', '10.159.37.174-linux:10050',
+      '10.159.37.175-linux:10050', '10.159.37.176-linux:10050', '10.159.37.177-linux:10050',
+      '10.159.44.3-linux:10050', '10.159.44.5-linux:10050', '10.159.44.6-linux:10050',
+      '10.159.44.4-linux:10050', '10.159.44.2-linux:10050']
+  - labels: {cluster: QD, project: BTBRRS}
+    targets: ['10.135.17.91:9100', '10.135.17.92:9100', '10.135.17.125:9100', '10.135.17.172:9100',
+      '10.135.13.167:9100', '10.135.108.13:9100', '10.135.108.14:9100', '10.135.13.161:9100',
+      '10.135.13.185:9100', '10.135.22.51:9100', '10.135.22.50:9100', '10.135.13.160:9100',
+      '10.138.104.101:9100', '10.138.26.127:9100', '10.138.26.129:9100', '10.138.104.109:9100',
+      '10.138.104.110:9100', '10.138.26.130:9100','10.135.13.154:9100','10.135.13.155:9100']
+  - labels: {cluster: BJ, project: HBDM}
+    targets: ['10.159.63.135-linux:10050', '10.159.63.152-linux:10050', '10.159.63.156-linux:10050']
+  - labels: {cluster: BJ, project: HECO}
+    targets: ['10.159.37.129-linux:10050', '10.159.37.130-linux:10050', '10.159.37.131-linux:10050',
+      '10.159.37.132-linux:10050', '10.159.37.133-linux:10050', '10.159.37.134-linux:10050',
+      '10.159.37.135-linux:10050', '10.159.37.136-linux:10050', '10.159.37.137-linux:10050',
+      '10.159.37.138-linux:10050', '10.159.37.139-linux:10050', '10.159.37.140-linux:10050',
+      '10.159.37.141-linux:10050', '10.159.37.142-linux:10050', '10.159.37.143-linux:10050']
+- job_name: mysql
+  relabel_configs:
+  - regex: (\d+\.\d+\.\d+\.\d+).*
+    source_labels: [__address__]
+    target_label: instance
+  static_configs:
+  - labels: {cluster: QD, project: MONITOR-PROD}
+    targets: ['10.138.16.192:9104']
+- job_name: redis
+  relabel_configs:
+  - regex: (\d+\.\d+\.\d+\.\d+).*
+    source_labels: [__address__]
+    target_label: instance
+  static_configs:
+  - labels: {cluster: QD, project: MONITOR-PROD}
+    targets: ['10.135.16.162:9121']
+- job_name: docker
+  relabel_configs:
+  - regex: (\d+\.\d+\.\d+\.\d+).*
+    source_labels: [__address__]
+    target_label: instance
+  static_configs:
+  - labels: {cluster: QD, project: PAAS-DEV}
+    targets: ['10.138.25.211:9095', '10.138.25.212:9095']
+  - labels: {cluster: QD, project: PAAS-PROD}
+    targets: ['10.138.8.215:9095', '10.138.8.216:9095']
+  - labels: {cluster: QD, project: MONITOR-PROD}
+    targets: ['10.138.40.224:9095', '10.138.40.225:9095']
+- job_name: rabbitmq
+  relabel_configs:
+  - regex: (\d+\.\d+\.\d+\.\d+).*
+    source_labels: [__address__]
+    target_label: instance
+  static_configs:
+  - labels: {cluster: QD, project: MONITOR-PROD}
+    targets: ['10.138.16.192:9672']
+- job_name: windows
+  relabel_configs:
+  - regex: (\d+\.\d+\.\d+\.\d+).*
+    source_labels: [__address__]
+    target_label: instance
+  static_configs:
+  - labels: {cluster: QD, project: YJQLCGL}
+    targets: ['192.168.99.100:9182', '10.135.16.128:9182']
+  - labels: {cluster: QD, project: RDCXT}
+    targets: ['10.135.7.118:9182']

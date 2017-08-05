@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.bingbaba.hostadmin.hostManager";
+option java_outer_classname = "HostPrecheckProto";
+
+package HostManager;
+
+service HostManager {
+  rpc Precheck (PrecheckRequest) returns (InitOrPrecheckReply) {}
+  rpc InitHosts (InitRequest) returns (InitOrPrecheckReply) {}
+  rpc Install (InstallRequest) returns (stream InstallMessage) {}
+}
+
+message PrecheckRequest {
+    repeated LoginInfo loginInfos = 1;
+}
+
+message InitOrPrecheckReply {
+    repeated TaskResult results = 1;
+}
+
+message LoginInfo {
+    string host = 1;
+    int32 port = 2;
+    string userName = 3;
+    string passwd = 4;
+}
+
+message TaskResult {
+    string host = 1;
+    string status = 2;
+    string message = 3;
+    string reason = 4;
+}
+
+message InitRequest {
+    map<string, string> labels = 1;
+    repeated LoginInfo loginInfos = 2;
+}
+
+message InstallRequest {
+    map<string, string> labels = 1;
+    map<string, InstallJobs> jobs = 2;
+}
+
+message InstallJobs {
+    repeated string ansibleJobs = 1;
+}
+
+message InstallMessage {
+    string job = 1;
+    string type = 2;
+    string host = 3;
+    int32 step = 4;
+    string name = 5;
+    string status = 6;
+    string message = 7;
+
+    int32 ok = 8;
+    int32 changed = 9;
+    int32 unreach = 10;
+    int32 failed = 11;
+}
