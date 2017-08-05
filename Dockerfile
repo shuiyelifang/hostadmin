@@ -2,7 +2,7 @@ FROM golang:1.8.3-alpine3.6
 MAINTAINER Xue Bing <xuebing1110@gmail.com>
 
 # timezone
-RUN cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN cp -f /usr/share/zoneinfo/Hongkong /etc/localtime
 
 # move to GOPATH
 RUN mkdir -p /go/src/github.com/xuebing1110/hostadmin
