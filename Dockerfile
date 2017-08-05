@@ -1,4 +1,4 @@
-FROM golang:1.8.3-onbuild
+FROM golang:1.8.3-alpine3.6
 MAINTAINER Xue Bing <xuebing1110@gmail.com>
 
 # timezone
