@@ -9,7 +9,7 @@ RUN echo "http://mirrors.aliyun.com/alpine/v3.6/main/" > /etc/apk/repositories
 # timezone
 RUN apk update && apk add --no-cache ansible \
     &&  apk add --no-cache tzdata \
-    && cp -r -f /usr/share/zoneinfo/Hongkong /etc/localtime \\
+    && cp -r -f /usr/share/zoneinfo/Hongkong /etc/localtime \
     && echo -ne "Alpine Linux 3.6 image. (`uname -rsv`)\n" >> /root/.built
 
 # move to GOPATH
