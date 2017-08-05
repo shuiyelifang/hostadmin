@@ -7,8 +7,8 @@ RUN cp /etc/apk/repositories /etc/apk/repositories.bak
 RUN echo "http://mirrors.aliyun.com/alpine/v3.6/main/" > /etc/apk/repositories
 
 # timezone
-RUN apk add --no-cache tzdata\
-    cp -f /usr/share/zoneinfo/Hongkong /etc/localtime
+RUN apk update & apk add --no-cache ansible tzdata\
+    cp -r -f /usr/share/zoneinfo/Hongkong /etc/localtime
 
 # move to GOPATH
 RUN mkdir -p /go/src/github.com/xuebing1110/hostadmin
