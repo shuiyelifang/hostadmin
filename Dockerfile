@@ -3,8 +3,8 @@ MAINTAINER Xue Bing <xuebing1110@gmail.com>
 
 
 # repo
-cp /etc/apk/repositories /etc/apk/repositories.bak
-echo "http://mirrors.aliyun.com/alpine/v3.6/main/" > /etc/apk/repositories
+RUN cp /etc/apk/repositories /etc/apk/repositories.bak
+RUN echo "http://mirrors.aliyun.com/alpine/v3.6/main/" > /etc/apk/repositories
 
 # timezone
 RUN apk add tzdata\
