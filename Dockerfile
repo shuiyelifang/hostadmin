@@ -7,7 +7,7 @@ RUN cp /etc/apk/repositories /etc/apk/repositories.bak
 RUN echo "http://mirrors.aliyun.com/alpine/v3.6/main/" > /etc/apk/repositories
 
 # timezone
-RUN apk add tzdata\
+RUN apk add --no-cache tzdata\
     cp -f /usr/share/zoneinfo/Hongkong /etc/localtime
 
 # move to GOPATH
