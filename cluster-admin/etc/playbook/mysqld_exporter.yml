@@ -38,8 +38,9 @@
     when: ansible_distribution_major_version != "7"
   - name: deploy the mysqld_exporter pkg
     get_url:
-      src=https://github.com/prometheus/mysqld_exporter/releases/download/v0.10.0/mysqld_exporter-0.10.0.linux-amd64.tar.gz
+      url=https://github.com/prometheus/mysqld_exporter/releases/download/v0.10.0/mysqld_exporter-0.10.0.linux-amd64.tar.gz
       dest=/root/Downloads/mysqld_exporter-0.10.0.linux-amd64.tar.gz
+      validate_certs=no
   - name: unzip mysqld_exporter pkg
     unarchive:
       src=/root/Downloads/mysqld_exporter-0.10.0.linux-amd64.tar.gz
