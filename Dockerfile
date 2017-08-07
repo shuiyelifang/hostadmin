@@ -20,7 +20,7 @@ WORKDIR $GOPATH/src/github.com/xuebing1110/hostadmin
 # copy config
 RUN mkdir -p /app
 COPY cluster-admin/etc/init.d/* /etc/init.d/
-COPY cluster-admin/etc/playbook/ /app/
+COPY cluster-admin/etc/playbook/* /app/
 COPY cluster-admin/etc/sysconfig/* /etc/sysconfig/
 COPY cluster-admin/etc/systemd/* /etc/systemd/system/
 
