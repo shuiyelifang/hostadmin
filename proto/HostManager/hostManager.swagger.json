@@ -15,6 +15,58 @@
     "application/json"
   ],
   "paths": {
+    "/v1/hostmanager/init": {
+      "post": {
+        "operationId": "InitHosts",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/HostManagerInitOrPrecheckReply"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HostManagerInitRequest"
+            }
+          }
+        ],
+        "tags": [
+          "HostManager"
+        ]
+      }
+    },
+    "/v1/hostmanager/install": {
+      "post": {
+        "operationId": "Install",
+        "responses": {
+          "200": {
+            "description": "(streaming responses)",
+            "schema": {
+              "$ref": "#/definitions/HostManagerInstallMessage"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HostManagerInstallRequest"
+            }
+          }
+        ],
+        "tags": [
+          "HostManager"
+        ]
+      }
+    },
     "/v1/hostmanager/precheck": {
       "post": {
         "operationId": "Precheck",
@@ -50,6 +102,34 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/HostManagerTaskResult"
+          }
+        }
+      }
+    },
+    "HostManagerInitRequest": {
+      "type": "object",
+      "properties": {
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "loginInfos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HostManagerLoginInfo"
+          }
+        }
+      }
+    },
+    "HostManagerInstallJobs": {
+      "type": "object",
+      "properties": {
+        "ansibleJobs": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         }
       }
@@ -94,6 +174,23 @@
         "failed": {
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "HostManagerInstallRequest": {
+      "type": "object",
+      "properties": {
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "jobs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/HostManagerInstallJobs"
+          }
         }
       }
     },

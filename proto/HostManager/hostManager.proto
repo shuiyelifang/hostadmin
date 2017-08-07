@@ -15,8 +15,18 @@ service HostManager {
       body: "*"
     };
   }
-  rpc InitHosts (InitRequest) returns (InitOrPrecheckReply) {}
-  rpc Install (InstallRequest) returns (stream InstallMessage) {}
+  rpc InitHosts (InitRequest) returns (InitOrPrecheckReply) {
+    option (google.api.http) = {
+      post: "/v1/hostmanager/init"
+      body: "*"
+    };
+  }
+  rpc Install (InstallRequest) returns (stream InstallMessage) {
+    option (google.api.http) = {
+      post: "/v1/hostmanager/install"
+      body: "*"
+    };
+  }
 }
 
 message PrecheckRequest {
