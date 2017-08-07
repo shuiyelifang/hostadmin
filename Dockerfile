@@ -7,11 +7,10 @@ RUN echo "http://mirrors.aliyun.com/alpine/v3.6/main/" > /etc/apk/repositories
 
 # timezone
 RUN apk update
-RUN apk add --no-cache py-pip ansible openssh
+RUN apk add --no-cache py-pip ansible openssh && pip install paramiko
 RUN apk add --no-cache tzdata \
     && echo "Asia/Shanghai" > /etc/timezone \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-RUN pip install paramiko
 
 # move to GOPATH
 RUN mkdir -p /go/src/github.com/xuebing1110/hostadmin

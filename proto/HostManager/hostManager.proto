@@ -6,8 +6,15 @@ option java_outer_classname = "HostPrecheckProto";
 
 package HostManager;
 
+import "google/api/annotations.proto";
+
 service HostManager {
-  rpc Precheck (PrecheckRequest) returns (InitOrPrecheckReply) {}
+  rpc Precheck (PrecheckRequest) returns (InitOrPrecheckReply) {
+    option (google.api.http) = {
+      post: "/v1/hostmanager/precheck"
+      body: "*"
+    };
+  }
   rpc InitHosts (InitRequest) returns (InitOrPrecheckReply) {}
   rpc Install (InstallRequest) returns (stream InstallMessage) {}
 }
