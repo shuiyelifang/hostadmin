@@ -106,8 +106,8 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 			defer wg.Done()
 
 			bookname := job
-			if !strings.HasSuffix(job, ".yml") {
-				bookname = fmt.Sprintf("%s_exporter.yml", job)
+			if !strings.HasSuffix(job, ".yml") && strings.Index(job, "/") == -1 {
+				bookname = fmt.Sprintf("playbook/%s.yml", job)
 			}
 			host_str := strings.Join(hosts, ",")
 

@@ -17,6 +17,12 @@ RUN mkdir -p /go/src/github.com/xuebing1110/hostadmin
 COPY . $GOPATH/src/github.com/xuebing1110/hostadmin/
 WORKDIR $GOPATH/src/github.com/xuebing1110/hostadmin
 
+# copy config
+COPY cluster-admin/etc/init.d/* /etc/init.d/
+COPY cluster-admin/etc/playbook/ /app/
+COPY cluster-admin/etc/sysconfig/* /etc/sysconfig/
+COPY cluster-admin/etc/systemd/* /etc/systemd/system/
+
 # build
 RUN mkdir -p /app
 RUN go build -o /app/cluster-admin cluster-admin/cmd/main.go
