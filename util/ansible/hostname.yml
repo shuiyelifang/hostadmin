@@ -1,7 +1,0 @@
-- name: hostname
-  hosts: "{{hosts}}"
-  tasks:
-    - name: hostname
-      shell: hostname
-    - name: pwd
-      shell: pwd
