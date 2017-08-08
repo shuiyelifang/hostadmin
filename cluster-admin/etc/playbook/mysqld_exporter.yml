@@ -1,4 +1,5 @@
-- hosts: "{{hosts}}"
+- name: "mysqld_exporter"
+  hosts: "{{hosts}}"
   become: yes
   tasks:
   - name: create exporter group

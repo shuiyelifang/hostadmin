@@ -128,7 +128,15 @@ func (app *AnsiblePlaybookParser) Execute(line []byte, outChan chan interface{},
 					// fmt.Printf("%v\n", err)
 					pbth.Message = string(task_ret[4])
 				} else {
-					pbth.Message = msgMap["msg"].(string)
+					if msgi, ok := msgMap["msg"]; ok {
+						pbth.Message = msgi.(string)
+					} else if msgi, ok := msgMap["stderr"]; ok {
+						pbth.Message = msgi.(string)
+					} else if msgi, ok := msgMap["stdout"]; ok {
+						pbth.Message = msgi.(string)
+					} else {
+						pbth.Message = string(task_ret[4])
+					}
 				}
 			}
 

@@ -1,4 +1,5 @@
-- hosts: "{{hosts}}"
+- name: "node_exporter"
+  hosts: "{{hosts}}"
   become: yes
   tasks:
   - name: create exporter group
@@ -36,7 +37,7 @@
       state=directory
   - name: deploy the node_exporter pkg
     get_url:
-      src=https://github.com/prometheus/node_exporter/releases/download/v0.14.0/node_exporter-0.14.0.linux-amd64.tar.gz
+      url=https://github.com/prometheus/node_exporter/releases/download/v0.14.0/node_exporter-0.14.0.linux-amd64.tar.gz
       dest=/root/Downloads/node_exporter-0.14.0.linux-amd64.tar.gz
       validate_certs=no
   - name: unzip node_exporter pkg
