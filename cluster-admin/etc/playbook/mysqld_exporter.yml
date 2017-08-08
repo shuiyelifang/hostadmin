@@ -45,6 +45,7 @@
     unarchive:
       src=/root/Downloads/mysqld_exporter-0.10.0.linux-amd64.tar.gz
       dest=/root/Downloads
+      remote_src=yes
   - name: move mysqld_exporter
     shell: cp -f /root/Downloads/mysqld_exporter-0.10.0.linux-amd64/mysqld_exporter /usr/sbin/mysqld_exporter
   - name: enable mysqld_exporter

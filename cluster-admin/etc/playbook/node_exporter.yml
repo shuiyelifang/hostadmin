@@ -43,6 +43,7 @@
     unarchive:
       src=/root/Downloads/node_exporter-0.14.0.linux-amd64.tar.gz
       dest=/root/Downloads
+      remote_src=yes
   - name: move node_exporter
     shell: cp -f /root/Downloads/node_exporter-0.14.0.linux-amd64/node_exporter /usr/sbin/node_exporter
   - name: enable node_exporter

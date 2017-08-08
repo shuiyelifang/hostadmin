@@ -1,5 +1,10 @@
 #! /usr/bin/env bash
 
+# chkconfig: 2345 80 05
+# description: Node Exporter for prometheus
+# processname: node_exporter
+# pidfile: /var/run/node_exporter.pid
+
 PATH=/bin:/usr/bin:/sbin:/usr/sbin
 NAME=node_exporter
 DESC="Node Exporter"
