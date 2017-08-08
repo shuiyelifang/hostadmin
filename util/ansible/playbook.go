@@ -12,8 +12,9 @@ import (
 
 var (
 	REGEXP_TASK_RET  = regexp.MustCompile(`(?m)^(\w+):\s*\[([^\]]+)\](?:: (\S+) => (\{.*\}))?\s*$`)
-	REGEXP_TASK_HEAD = regexp.MustCompile(`(?m)^(\w+)\s+(\w+|\[[\]]+\])\s+\*+$`)
-	REGEXP_PLAY_RET  = regexp.MustCompile(`(?m)^(\S+)\s*:\s*ok=(\d+)\s+changed=(\d+)\s+unreachable=(\d+)\s+failed=(\d+)\s*$`)
+	REGEXP_TASK_HEAD = regexp.MustCompile(`(?m)^(\w+)\s+(\w+|\[[^\]]+\])\s+\*+$`)
+	//REGEXP_TASK_HEAD = regexp.MustCompile(`(?m)^(\w+)\s+(\w+|\[[\]]+\])\s+\*+$`)
+	REGEXP_PLAY_RET = regexp.MustCompile(`(?m)^(\S+)\s*:\s*ok=(\d+)\s+changed=(\d+)\s+unreachable=(\d+)\s+failed=(\d+)\s*$`)
 )
 
 type PlayBookMessage struct {
