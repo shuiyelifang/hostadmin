@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	osexec "os/exec"
 	"sync"
@@ -92,6 +93,7 @@ func (c *Command) Messages() <-chan interface{} {
 }
 
 func (c *Command) Wait() error {
+	defer log.Printf("finish running %s ,returnCode:%d", c.cmd, c.ReturnCode)
 	c.wg.Wait()
 
 	err := c.execCmd.Wait()
