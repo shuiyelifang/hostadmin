@@ -12,9 +12,11 @@ RUN apk add --no-cache tzdata \
     && echo "Asia/Shanghai" > /etc/timezone \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-# tini
-RUN apk add --no-cache tini
-ENTRYPOINT ["/sbin/tini", "--"]
+# Add Tini
+ENV TINI_VERSION v0.16.1
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+ENTRYPOINT ["/tini", "--"]
 
 # move to GOPATH
 RUN mkdir -p /go/src/github.com/xuebing1110/hostadmin
