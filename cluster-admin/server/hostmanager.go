@@ -153,7 +153,7 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 					}
 				}
 			}
-			playbook.Wait()
+			// playbook.Wait()
 		}(job, hosts)
 	}
 
