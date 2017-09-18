@@ -61,7 +61,12 @@ func (c *Command) RunStreaming(se StreamExecuter) error {
 	// read stdout
 	c.wg.Add(1)
 	go func() {
-		defer c.wg.Done()
+		defer func() {
+			c.wg.Done()
+			c.Close()
+			stdout.Close()
+			c.Wait()
+		}()
 
 		bio := bufio.NewReader(stdout)
 		for {
@@ -76,9 +81,7 @@ func (c *Command) RunStreaming(se StreamExecuter) error {
 				se.Execute(line, c.outChan, false)
 			}
 		}
-		c.Close()
-		c.Wait()
-		stdout.Close()
+
 	}()
 
 	return nil
