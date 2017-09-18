@@ -40,6 +40,7 @@ func (c *Command) RunStreaming(se StreamExecuter) error {
 	// stdout
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
+		c.Wait()
 		return err
 	}
 
@@ -53,6 +54,7 @@ func (c *Command) RunStreaming(se StreamExecuter) error {
 	// start run command
 	err = cmd.Start()
 	if err != nil {
+		c.Wait()
 		return err
 	}
 
@@ -74,9 +76,9 @@ func (c *Command) RunStreaming(se StreamExecuter) error {
 				se.Execute(line, c.outChan, false)
 			}
 		}
+		c.Close()
 		c.Wait()
 		stdout.Close()
-		c.Close()
 	}()
 
 	return nil
