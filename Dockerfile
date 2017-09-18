@@ -16,7 +16,7 @@ RUN apk add --no-cache tzdata \
 ENV TINI_VERSION v0.16.1
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
-ENTRYPOINT ["/tini", "--"]
+# ENTRYPOINT ["/tini", "--"]
 
 # move to GOPATH
 RUN mkdir -p /go/src/github.com/xuebing1110/hostadmin
