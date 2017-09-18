@@ -12,6 +12,10 @@ RUN apk add --no-cache tzdata \
     && echo "Asia/Shanghai" > /etc/timezone \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
+# tini
+RUN apk add --no-cache tini
+ENTRYPOINT ["/sbin/tini", "--"]
+
 # move to GOPATH
 RUN mkdir -p /go/src/github.com/xuebing1110/hostadmin
 COPY . $GOPATH/src/github.com/xuebing1110/hostadmin/
