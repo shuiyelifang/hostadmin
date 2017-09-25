@@ -106,8 +106,9 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 			defer wg.Done()
 
 			bookpath := job
+			bookinfo, BookDictfound := playBookConvertDict[job]
 			if !strings.HasSuffix(job, ".yml") && strings.Index(job, "/") == -1 {
-				if bookinfo, found := playBookConvertDict[job]; found {
+				if BookDictfound {
 					bookpath = fmt.Sprintf("playbook/%s.yml", bookinfo.Name)
 				} else {
 					bookpath = fmt.Sprintf("playbook/%s.yml", job)
@@ -144,8 +145,11 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 
 					// progress
 					var progress int32
-					if bookinfo, found := playBookConvertDict[job]; found {
+					if BookDictfound {
 						progress = int32(pbth.Step / bookinfo.Steps * 100)
+						if progress >= 100 {
+							progress = 99
+						}
 					} else {
 						progress = 0
 					}
