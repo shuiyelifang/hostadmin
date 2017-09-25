@@ -166,6 +166,10 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 					}
 				case *ansible.PlayBookRecap:
 					pbr := ret.(*ansible.PlayBookRecap)
+					var status = "ok"
+					if pbr.Unreach > 0 || pbr.Failed > 0 {
+						status = "fatal"
+					}
 					msgs <- &pb.InstallMessage{
 						Job:      job,
 						Type:     "RECAP",
@@ -175,6 +179,7 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 						Unreach:  int32(pbr.Unreach),
 						Failed:   int32(pbr.Failed),
 						Progress: 100,
+						Status:   status,
 					}
 					overMap[pbr.Host] = true
 				}
@@ -192,6 +197,7 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 						Unreach:  1,
 						Failed:   1,
 						Progress: 100,
+						Status:   "fatal",
 					}
 				}
 			}
