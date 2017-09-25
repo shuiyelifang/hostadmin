@@ -146,7 +146,7 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 					// progress
 					var progress int32
 					if BookDictfound {
-						progress = int32(pbth.Step / bookinfo.Steps * 100)
+						progress = int32(pbth.Step * 100 / bookinfo.Steps)
 						if progress >= 100 {
 							progress = 99
 						}
