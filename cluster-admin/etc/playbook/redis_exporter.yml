@@ -1,0 +1,51 @@
+- hosts: "{{hosts}}"
+  sudo: yes
+  tasks:
+  - name: create exporter group
+    group:
+      name=exporter
+  - name: create exporter user
+    user:
+      name=exporter
+      comment="prometheus exporter user"
+      group=exporter
+      shell=/sbin/nologin
+      createhome=no
+  - name: sysconfig.exporter file
+    copy:
+      src=/etc/sysconfig/redis_exporter
+      dest=/etc/sysconfig/redis_exporter
+  - name: set REDIS_ALIAS
+    shell: perl -pi -e 's/^(REDIS_ALIAS=\s*).*/${1}"{{ansible_default_ipv4.address}}:6379"/' /etc/sysconfig/redis_exporter
+  - name: sysconfig.redis_exporter file
+    copy:
+      src=/etc/systemd/system/redis_exporter.service
+      dest=/etc/systemd/system/redis_exporter.service
+    when: ansible_distribution_major_version == "7"
+  - name: create Downloads dir
+    file:
+      path=/root/Downloads
+      state=directory
+  - name: deploy the redis_exporter pkg
+    get_url:
+      url=https://github.com/oliver006/redis_exporter/releases/download/v0.12.2/redis_exporter-v0.12.2.linux-amd64.tar.gz
+      dest=/root/Downloads/redis_exporter-v0.12.2.linux-amd64.tar.gz
+      validate_certs=no
+  - name: unzip redis_exporter pkg
+    unarchive:
+      src=/root/Downloads/redis_exporter-v0.12.2.linux-amd64.tar.gz
+      dest=/root/Downloads
+  - name: move redis_exporter
+    shell: cp -f /root/Downloads/redis_exporter /usr/sbin/redis_exporter
+  - name: enable redis_exporter
+    service:
+      name=redis_exporter
+      enabled=yes
+  - name: start redis_exporter
+    service: name=redis_exporter state=restarted
+  - name: configure firewall
+    shell: firewall-cmd --permanent --zone=public --add-port=9121/tcp
+    ignore_errors: True
+  - name: reload firewall
+    shell: firewall-cmd --reload
+    ignore_errors: True

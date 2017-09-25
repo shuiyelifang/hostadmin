@@ -143,6 +143,10 @@ func (app *AnsiblePlaybookParser) Execute(line []byte, outChan chan interface{},
 			outChan <- pbth
 		}
 	}
+
+	// if eof {
+	// 	close(outChan)
+	// }
 }
 
 func TrimBracket(c []byte) []byte {

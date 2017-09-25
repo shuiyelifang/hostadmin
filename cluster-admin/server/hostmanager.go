@@ -105,13 +105,17 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 		go func(job string, hosts []string) {
 			defer wg.Done()
 
-			bookname := job
+			bookpath := job
 			if !strings.HasSuffix(job, ".yml") && strings.Index(job, "/") == -1 {
-				bookname = fmt.Sprintf("playbook/%s.yml", job)
+				if bookinfo, found := playBookConvertDict[job]; found {
+					bookpath = fmt.Sprintf("playbook/%s.yml", bookinfo.Name)
+				} else {
+					bookpath = fmt.Sprintf("playbook/%s.yml", job)
+				}
 			}
 			host_str := strings.Join(hosts, ",")
 
-			playbook, err := ansible.Play(host_str, bookname)
+			playbook, err := ansible.Play(host_str, bookpath)
 			if err != nil {
 				msgs <- &pb.InstallMessage{
 					Job:     job,
@@ -119,6 +123,11 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 					Message: err.Error(),
 				}
 				return
+			}
+
+			overMap := make(map[string]bool)
+			for _, host := range hosts {
+				overMap[host] = false
 			}
 
 			for ret := range playbook.Messages() {
@@ -132,24 +141,53 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 					}
 				case *ansible.PlayBookTaskHost:
 					pbth := ret.(*ansible.PlayBookTaskHost)
+
+					// progress
+					var progress int32
+					if bookinfo, found := playBookConvertDict[job]; found {
+						progress = int32(pbth.Step / bookinfo.Steps * 100)
+					} else {
+						progress = 0
+					}
+
 					msgs <- &pb.InstallMessage{
-						Job:     job,
-						Type:    "HOST",
-						Host:    pbth.Host,
-						Name:    pbth.Name,
-						Status:  pbth.Status,
-						Message: pbth.Message,
-						Step:    int32(pbth.Step),
+						Job:      job,
+						Type:     "HOST",
+						Host:     pbth.Host,
+						Name:     pbth.Name,
+						Status:   pbth.Status,
+						Message:  pbth.Message,
+						Step:     int32(pbth.Step),
+						Progress: progress,
 					}
 				case *ansible.PlayBookRecap:
 					pbr := ret.(*ansible.PlayBookRecap)
 					msgs <- &pb.InstallMessage{
-						Job:     job,
-						Type:    "RECAP",
-						Ok:      int32(pbr.OK),
-						Changed: int32(pbr.Changed),
-						Unreach: int32(pbr.Unreach),
-						Failed:  int32(pbr.Failed),
+						Job:      job,
+						Type:     "RECAP",
+						Host:     pbr.Host,
+						Ok:       int32(pbr.OK),
+						Changed:  int32(pbr.Changed),
+						Unreach:  int32(pbr.Unreach),
+						Failed:   int32(pbr.Failed),
+						Progress: 100,
+					}
+					overMap[pbr.Host] = true
+				}
+			}
+
+			for _, host := range hosts {
+				over := overMap[host]
+				if !over {
+					msgs <- &pb.InstallMessage{
+						Job:      job,
+						Type:     "RECAP",
+						Host:     host,
+						Ok:       0,
+						Changed:  0,
+						Unreach:  1,
+						Failed:   1,
+						Progress: 100,
 					}
 				}
 			}

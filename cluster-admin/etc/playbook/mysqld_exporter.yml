@@ -55,3 +55,9 @@
       enabled=yes
   - name: start mysqld_exporter
     service: name=mysqld_exporter state=restarted
+  - name: configure firewall
+    shell: firewall-cmd --permanent --zone=public --add-port=9104/tcp
+    ignore_errors: True
+  - name: reload firewall
+    shell: firewall-cmd --reload
+    ignore_errors: True

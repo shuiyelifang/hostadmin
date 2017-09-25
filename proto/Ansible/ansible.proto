@@ -1,23 +1,23 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "com.bingbaba.hostadmin.hostManager";
-option java_outer_classname = "HostManagerProto";
+option java_package = "com.bingbaba.hostadmin.ansible";
+option java_outer_classname = "AnsibleProto";
 
-package HostManager;
+package Ansible;
 
 import "google/api/annotations.proto";
 
-service HostManager {
-  rpc Precheck (PrecheckRequest) returns (InitOrPrecheckReply) {
+service Ansible {
+  rpc Play (PlayBook) returns (stream PlayBookMessage) {
     option (google.api.http) = {
-      post: "/v1/hostmanager/precheck"
+      post: "/v1/ansible/play"
       body: "*"
     };
   }
-  rpc InitHosts (InitRequest) returns (InitOrPrecheckReply) {
+  rpc AddHost (HostConfigure) returns (CommonReply) {
     option (google.api.http) = {
-      post: "/v1/hostmanager/init"
+      post: "/v1/ansible/host"
       body: "*"
     };
   }
@@ -78,5 +78,4 @@ message InstallMessage {
     int32 changed = 9;
     int32 unreach = 10;
     int32 failed = 11;
-    int32 progress = 12;
 }
