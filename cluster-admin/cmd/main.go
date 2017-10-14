@@ -1,13 +1,14 @@
 package main
 
 import (
-	"log"
 	"net"
 	"net/http"
 	"os"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/sirupsen/logrus"
 	"github.com/xuebing1110/hostadmin/cluster-admin/server"
+	"github.com/xuebing1110/hostadmin/log"
 	pb "github.com/xuebing1110/hostadmin/proto/HostManager"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -16,6 +17,7 @@ import (
 
 var GRPC_PORT string
 var RESTFUL_FLAG string
+var logger *logrus.Logger
 
 func init() {
 	GRPC_PORT = os.Getenv("GRPC_PORT")
@@ -24,6 +26,9 @@ func init() {
 	}
 
 	RESTFUL_FLAG = os.Getenv("RESTFUL_FLAG")
+
+	log.InitLogger("", false)
+	logger = log.GetLogger()
 }
 
 func main() {
@@ -38,10 +43,10 @@ func main() {
 			exit <- true
 		}()
 
-		log.Print("start grpc server...")
+		logger.Info("start grpc server...")
 		err := grpcServer()
 		if err != nil {
-			log.Fatalf("failed to start grpc server: %v", err)
+			logger.Fatalf("failed to start grpc server: %v", err)
 		}
 	}()
 
@@ -52,10 +57,10 @@ func main() {
 				exit <- true
 			}()
 
-			log.Print("start rest server...")
+			logger.Info("start rest server...")
 			err := restServer(ctx)
 			if err != nil {
-				log.Fatalf("failed to start rest server: %v", err)
+				logger.Fatalf("failed to start rest server: %v", err)
 			}
 		}()
 	}
