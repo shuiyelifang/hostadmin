@@ -6,12 +6,13 @@ import (
 	"sync"
 
 	"github.com/sirupsen/logrus"
+	"golang.org/x/net/context"
+
 	"github.com/xuebing1110/hostadmin/host"
 	"github.com/xuebing1110/hostadmin/log"
 	pb "github.com/xuebing1110/hostadmin/proto/HostManager"
 	"github.com/xuebing1110/hostadmin/util/ansible"
 	"github.com/xuebing1110/hostadmin/util/ssh"
-	"golang.org/x/net/context"
 )
 
 var logger *logrus.Logger
@@ -61,9 +62,22 @@ func (s *HostManagerServer) InitHosts(ctx context.Context, req *pb.InitRequest) 
 	hlb.HostsSSHTrust()
 
 	// response
+	ahs := make([]ansible.AnsibleHost, 0)
 	trs := make([]*pb.TaskResult, len(hlb))
 	for i, tr := range hlb {
 		trs[i] = tr.Result
+
+		if tr.Result.Status == host.STATUS_OK {
+			ahs = append(ahs, ansible.AnsibleHost{tr.Host, tr.UserName})
+		}
+	}
+
+	// save to ansible hosts file
+	for _, labelvalue := range req.Labels {
+		err := ansible.AddHosts(labelvalue, ahs)
+		if err != nil {
+			logger.Errorf("write ansible group %s to hosts file failed:%v", labelvalue, err)
+		}
 	}
 
 	return &pb.InitOrPrecheckReply{Results: trs}, nil
@@ -198,6 +212,11 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 						Failed:   1,
 						Progress: 100,
 						Status:   "fatal",
+					}
+				} else { // registe service to consul
+					err := RegisteSrv(job, host, req.Labels)
+					if err != nil {
+						logger.Errorf("registe %s's %s srv to consul failed:%v", host, job, err)
 					}
 				}
 			}

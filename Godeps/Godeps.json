@@ -3,7 +3,7 @@
 	"GoVersion": "go1.8",
 	"GodepVersion": "v79",
 	"Packages": [
-		"./cluster-admin/cmd/..."
+		"./cluster-admin/..."
 	],
 	"Deps": [
 		{
@@ -174,9 +174,31 @@
 			"Rev": "f2862b476edcef83412c7af8687c9cd8e4097c0f"
 		},
 		{
+			"ImportPath": "github.com/hashicorp/consul/api",
+			"Comment": "v1.0.0-beta2-52-gd5b945c",
+			"Rev": "d5b945ccee2acc938acba3bfb524af71aaecbf08"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/go-cleanhttp",
+			"Rev": "3573b8b52aa7b37b9358d966a898feb387f62437"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/go-rootcerts",
+			"Rev": "6bb64b370b90e7ef1fa532be9e591a81c3493e00"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/serf/coordinate",
+			"Comment": "v0.8.1-71-g555c6fa",
+			"Rev": "555c6fa2a11d1f8e08ac9964015e864a3f61e7c3"
+		},
+		{
 			"ImportPath": "github.com/jmespath/go-jmespath",
 			"Comment": "0.2.2-14-gbd40a43",
 			"Rev": "bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d"
+		},
+		{
+			"ImportPath": "github.com/mitchellh/go-homedir",
+			"Rev": "b8bc1bf767474819792c23f32d8286a45736f1c6"
 		},
 		{
 			"ImportPath": "github.com/prometheus/common/model",
