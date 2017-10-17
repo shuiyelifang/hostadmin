@@ -42,8 +42,10 @@ func AddHosts(label string, hosts []AnsibleHost) error {
 				labels = append(labels, label_cur)
 			} else if label_cur != "" {
 				cols := strings.Split(line, " ")
-				if len(cols) > 1 {
+				if len(cols) >= 1 {
 					AnsibleHosts[label_cur] = append(AnsibleHosts[label_cur], cols)
+				} else {
+
 				}
 			} else {
 
@@ -95,17 +97,18 @@ func AddHosts(label string, hosts []AnsibleHost) error {
 	// write temp file
 	var new_content = make([]string, 0)
 	for _, label_tmp := range labels {
-		new_content = append(new_content, fmt.Sprintf("\n[%s]\n", label_tmp))
+		new_content = append(new_content, fmt.Sprintf("\n[%s]", label_tmp))
 		for _, hostline := range AnsibleHosts[label_tmp] {
 			new_content = append(new_content, strings.Join(hostline, " "))
-			new_content = append(new_content, "\n")
 		}
 	}
-	err = ioutil.WriteFile(HostsFileTmp, []byte(strings.Join(new_content, "")), 0644)
+	err = ioutil.WriteFile(HostsFileTmp, []byte(strings.Join(new_content, "\n")), 0644)
 	if err != nil {
 		return fmt.Errorf("write to %s error:%v", HostsFileTmp, err)
 	}
 
 	// rename
+	os.Remove(HostsFile + ".bak")
+	os.Rename(HostsFile, HostsFile+".bak")
 	return os.Rename(HostsFileTmp, HostsFile)
 }
