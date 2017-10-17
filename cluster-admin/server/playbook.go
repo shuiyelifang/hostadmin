@@ -49,20 +49,20 @@ var playBookConvertDict = map[string]PlayBookInfo{
 		Port:      9100,
 		CheckPath: "/metrics",
 	},
-	"REDIS": PlayBookInfo{
-		Name:      "redis_exporter",
-		Steps:     14,
-		SrvName:   "redis_exporter",
-		Port:      9121,
-		CheckPath: "/metrics",
-	},
-	"MYSQL": PlayBookInfo{
-		Name:      "mysql_exporter",
-		Steps:     15,
-		SrvName:   "mysql_exporter",
-		Port:      9104,
-		CheckPath: "/metrics",
-	},
+	// "REDIS": PlayBookInfo{
+	// 	Name:      "redis_exporter",
+	// 	Steps:     14,
+	// 	SrvName:   "redis_exporter",
+	// 	Port:      9121,
+	// 	CheckPath: "/metrics",
+	// },
+	// "MYSQL": PlayBookInfo{
+	// 	Name:      "mysql_exporter",
+	// 	Steps:     15,
+	// 	SrvName:   "mysql_exporter",
+	// 	Port:      9104,
+	// 	CheckPath: "/metrics",
+	// },
 }
 
 func RegisteSrv(job string, host string, labelPairs map[string]string) error {
