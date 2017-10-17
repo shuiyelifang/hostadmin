@@ -108,7 +108,5 @@ func AddHosts(label string, hosts []AnsibleHost) error {
 	}
 
 	// rename
-	os.Remove(HostsFile + ".bak")
-	os.Rename(HostsFile, HostsFile+".bak")
 	return os.Rename(HostsFileTmp, HostsFile)
 }
