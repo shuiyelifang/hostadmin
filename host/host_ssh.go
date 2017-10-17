@@ -40,22 +40,7 @@ func (hl *HostLoginInfo) SSHCheck(sudo bool) error {
 	defer client.Close()
 
 	if sudo {
-		wf, err := ssh.NewWaitforer(client)
-		if err != nil {
-			return err
-		}
-		defer wf.Close()
-
-		wr := wf.Waitfor("sudo whoami", 5*time.Second, REG_SUDO_PROMPT, ssh.PROMPT_SHELL_REG)
-		if wr.Error != nil {
-			return wr.Error
-		} else {
-			if string(wr.Content) == "root" {
-				return nil
-			} else {
-				return ERR_NOT_SUDOER
-			}
-		}
+		return checkSudo(client)
 	}
 
 	return nil
@@ -65,20 +50,51 @@ func (hl *HostLoginInfo) getSSHClient() (*xssh.Client, error) {
 	return ssh.GetClientWithAuthType(hl.Host, hl.Port, hl.UserName, hl.Passwd, hl.authType)
 }
 
-func (hl *HostLoginInfo) HostSSHTrust() error {
-	client, err := ssh.GetClientWithAuthType(hl.Host, hl.Port, hl.UserName, hl.Passwd, ssh.LOGIN_USE_PUBKEY)
-	if err == nil {
-		client.Close()
-		return ERR_TRUST_ALREADY
-	}
-
-	client, err = ssh.GetClientWithAuthType(hl.Host, hl.Port, hl.UserName, hl.Passwd, ssh.LOGIN_USE_PASSWD)
+func checkSudo(client *xssh.Client) error {
+	wf, err := ssh.NewWaitforer(client)
 	if err != nil {
 		return err
 	}
-	defer client.Close()
+	defer wf.Close()
 
-	return ssh.Trust(client)
+	wr := wf.Waitfor("sudo whoami", 5*time.Second, REG_SUDO_PROMPT, ssh.PROMPT_SHELL_REG)
+	if wr.Error != nil {
+		return wr.Error
+	} else {
+		if string(wr.Content) == "root" {
+			return nil
+		} else {
+			return ERR_NOT_SUDOER
+		}
+	}
+}
+
+func (hl *HostLoginInfo) HostSSHTrust() error {
+	// use public key
+	client, err := ssh.GetClientWithAuthType(hl.Host, hl.Port, hl.UserName, hl.Passwd, ssh.LOGIN_USE_PUBKEY)
+	if err == nil {
+		defer client.Close()
+		err = checkSudo(client)
+		if err != nil {
+			return err
+		} else {
+			return ERR_TRUST_ALREADY
+		}
+	}
+
+	// use password
+	client, err = ssh.GetClientWithAuthType(hl.Host, hl.Port, hl.UserName, hl.Passwd, ssh.LOGIN_USE_PASSWD)
+	if err != nil {
+		return err
+	} else {
+		defer client.Close()
+		err = checkSudo(client)
+		if err != nil {
+			return err
+		} else {
+			return ssh.Trust(client)
+		}
+	}
 }
 
 func (hlb HostLoginInfoBatch) HostsSSHTrust() {
