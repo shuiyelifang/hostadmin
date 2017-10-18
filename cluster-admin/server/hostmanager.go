@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"sync"
 
@@ -128,8 +129,28 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 					bookpath = fmt.Sprintf("playbook/%s.yml", job)
 				}
 			}
-			host_str := strings.Join(hosts, ",")
 
+			// return if playbook not exist
+			_, err := os.Stat(bookpath)
+			if err != nil && os.IsNotExist(err) {
+				for _, host := range hosts {
+					msgs <- &pb.InstallMessage{
+						Job:      job,
+						Type:     "RECAP",
+						Host:     host,
+						Ok:       0,
+						Changed:  0,
+						Unreach:  1,
+						Failed:   1,
+						Progress: 100,
+						Status:   "invalid",
+					}
+				}
+				return
+			}
+
+			// execute playbook
+			host_str := strings.Join(hosts, ",")
 			playbook, err := ansible.Play(host_str, bookpath)
 			if err != nil {
 				msgs <- &pb.InstallMessage{
