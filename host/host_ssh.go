@@ -161,7 +161,8 @@ func (hl *HostLoginInfo) parseSSHErr(err error) {
 				tr.Message = MSG_SSH_NOT_SUDOER
 			} else if strings.Index(err.Error(), "unable to authenticate") >= 0 {
 				tr.Message = MSG_SSH_NOAUTH
-			} else if strings.Index(err.Error(), "getsockopt: connection refused") >= 0 {
+			} else if strings.Index(err.Error(), "getsockopt: connection refused") >= 0 ||
+				strings.Index(err.Error(), "connection reset by peer") >= 0 {
 				tr.Message = MSG_SSH_UNREACH
 			} else {
 				tr.Message = MSG_SSH_FAILED
