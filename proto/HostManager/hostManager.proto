@@ -27,6 +27,12 @@ service HostManager {
       body: "*"
     };
   }
+  rpc Install2 (InstallRequest2) returns (stream InstallMessage) {
+    option (google.api.http) = {
+      post: "/v1/hostmanager/install2"
+      body: "*"
+    };
+  }
 }
 
 message PrecheckRequest {
@@ -63,6 +69,22 @@ message InstallRequest {
 
 message InstallJobs {
     repeated string ansibleJobs = 1;
+}
+
+message InstallRequest2 {
+    map<string, string> labels = 1;
+    repeated HostInstallJobs jobs = 2;
+}
+
+message HostInstallJobs {
+    string host = 1;
+    repeated HostInstallTask tasks = 2;
+}
+
+message HostInstallTask {
+    string name = 1;
+    string type = 2;
+    map<string, string> params = 3;
 }
 
 message InstallMessage {

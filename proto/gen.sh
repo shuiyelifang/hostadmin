@@ -1,4 +1,10 @@
 #!/bin/bash
+
+########## Reference documentation ##############
+# https://grpc.io/blog/coreos
+# https://github.com/grpc-ecosystem/grpc-gateway
+#################################################
+
 echo "generate stub..."
 protoc -I/usr/local/include \
     -I/Users/xuebing/WorkSpace/go/src \

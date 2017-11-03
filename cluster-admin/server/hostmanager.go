@@ -262,3 +262,23 @@ func (s *HostManagerServer) Install(req *pb.InstallRequest, stream pb.HostManage
 
 	return nil
 }
+
+func (s *HostManagerServer) Install2(req *pb.InstallRequest2, stream pb.HostManager_Install2Server) error {
+	// //job => hosts
+	// jobMap := make(map[string][]string)
+	// for _, hostJobs := range req.Jobs {
+	// 	host := hostJobs.Host
+	// 	for _, task := range hostJobs.Tasks {
+	// 		// TODO: support aother task type
+
+	// 		task_name := task.Name
+	// 		if _, found := jobMap[task_name]; !found {
+	// 			jobMap[job] = make([]string, 0)
+	// 		}
+	// 		jobMap[job] = append(jobMap[job], host)
+	// 	}
+	// }
+
+	logger.Warn("Install2 is not support !!!")
+	return nil
+}

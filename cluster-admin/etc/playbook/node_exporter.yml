@@ -36,10 +36,9 @@
       path=/root/Downloads
       state=directory
   - name: deploy the node_exporter pkg
-    get_url:
-      url=https://github.com/prometheus/node_exporter/releases/download/v0.14.0/node_exporter-0.14.0.linux-amd64.tar.gz
+    copy:
+      src=/root/Downloads/node_exporter-0.14.0.linux-amd64.tar.gz
       dest=/root/Downloads/node_exporter-0.14.0.linux-amd64.tar.gz
-      validate_certs=no
   - name: unzip node_exporter pkg
     unarchive:
       src=/root/Downloads/node_exporter-0.14.0.linux-amd64.tar.gz

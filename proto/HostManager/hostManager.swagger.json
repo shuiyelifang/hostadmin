@@ -67,6 +67,32 @@
         ]
       }
     },
+    "/v1/hostmanager/install2": {
+      "post": {
+        "operationId": "Install2",
+        "responses": {
+          "200": {
+            "description": "(streaming responses)",
+            "schema": {
+              "$ref": "#/definitions/HostManagerInstallMessage"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HostManagerInstallRequest2"
+            }
+          }
+        ],
+        "tags": [
+          "HostManager"
+        ]
+      }
+    },
     "/v1/hostmanager/precheck": {
       "post": {
         "operationId": "Precheck",
@@ -95,6 +121,37 @@
     }
   },
   "definitions": {
+    "HostManagerHostInstallJobs": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HostManagerHostInstallTask"
+          }
+        }
+      }
+    },
+    "HostManagerHostInstallTask": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "params": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "HostManagerInitOrPrecheckReply": {
       "type": "object",
       "properties": {
@@ -194,6 +251,23 @@
           "type": "object",
           "additionalProperties": {
             "$ref": "#/definitions/HostManagerInstallJobs"
+          }
+        }
+      }
+    },
+    "HostManagerInstallRequest2": {
+      "type": "object",
+      "properties": {
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "jobs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HostManagerHostInstallJobs"
           }
         }
       }
