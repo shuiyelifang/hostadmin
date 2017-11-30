@@ -11,6 +11,7 @@ var logger *logrus.Logger
 var initOnce sync.Once
 
 func init() {
+	logger = new(logrus.Logger)
 	InitLogger("", false)
 }
 
