@@ -76,7 +76,7 @@ func RegisteSrv(job string, host string, labelPairs map[string]string) error {
 	}
 
 	// service tags : ["labelname1=labelvalue1,labelname2=labelvalue2"]
-	var tags = make([]string, len(labelPairs))
+	var tags = make([]string, 0, len(labelPairs))
 	for name, value := range labelPairs {
 		tags = append(tags, name+"="+value)
 	}
